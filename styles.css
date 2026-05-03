@@ -544,7 +544,7 @@ body {
 
 .schedule-table td {
   padding: 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--text-light);
   vertical-align: middle;
 }
 
@@ -556,7 +556,7 @@ body {
   min-width: 90px;
 }
 
-.week-num-cell .wn-num { font-weight: 700; color: var(--text-strong); }
+.week-num-cell .wn-num { font-weight: 700; color: var(--text-strong); display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
 .week-num-cell .wn-dates { font-size: 0.72rem; color: var(--text-muted); }
 
 .week-notes-cell {
@@ -583,7 +583,6 @@ body {
   letter-spacing: .05em;
   padding: 0.15rem 0.45rem;
   border-radius: 99px;
-  margin-top: 0.25rem;
 }
 
 .week-highlight-badge.teal { background: var(--teal-dim); color: var(--teal); border: 1px solid var(--teal); }
@@ -930,4 +929,101 @@ body {
   .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
   .run-types-grid, .blocks-grid, .overview-grid, .notes-grid { grid-template-columns: 1fr; }
   #main { padding: 1rem 0.75rem; }
+
+  /* Bigger touch targets for collapse buttons */
+  .collapse-btn { padding: 0.4rem 0.75rem; }
+
+  /* Pacing table: let it scroll horizontally */
+  .pacing-table { min-width: 460px; }
+
+  /* ---- Schedule table: convert to per-week cards ---- */
+  .schedule-table { min-width: 0; }
+  .schedule-table thead { display: none; }
+  .schedule-table,
+  .schedule-table tbody { display: block; }
+
+  /* Each week row becomes a card */
+  .schedule-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 0.75rem;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    background: var(--card);
+  }
+
+  /* Block row colors move from the tr to the week header cell */
+  .schedule-table tr.block-1-row,
+  .schedule-table tr.block-2-row,
+  .schedule-table tr.block-3-row,
+  .schedule-table tr.block-4-row { background: var(--card); }
+
+  /* Remove default td bottom borders (cards handle their own borders) */
+  .schedule-table td { border-bottom: none; }
+
+  /* Week header spans all 3 columns */
+  .schedule-table td:nth-child(1) {
+    grid-column: 1 / -1;
+    border-bottom: 2px solid var(--border);
+    border-left: 3px solid transparent;
+  }
+
+  /* Block accent colors on week header cell */
+  .schedule-table tr.block-1-row td:nth-child(1) {
+    background: var(--block1);
+    border-bottom-color: var(--block1-border);
+    border-left-color: var(--block1-accent);
+  }
+  .schedule-table tr.block-2-row td:nth-child(1) {
+    background: var(--block2);
+    border-bottom-color: var(--block2-border);
+    border-left-color: var(--block2-accent);
+  }
+  .schedule-table tr.block-3-row td:nth-child(1) {
+    background: var(--block3);
+    border-bottom-color: var(--block3-border);
+    border-left-color: var(--block3-accent);
+  }
+  .schedule-table tr.block-4-row td:nth-child(1) {
+    background: var(--block4);
+    border-bottom-color: var(--block4-border);
+    border-left-color: var(--block4-accent);
+  }
+
+  /* Current week: teal left accent overrides block color */
+  .schedule-table tr.current-week-row td:nth-child(1),
+  .schedule-table tr.current-week-row td:first-child { border-left-color: var(--teal); }
+
+  /* Dividers between the three session columns */
+  .schedule-table td:nth-child(3) {
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+  }
+
+  /* Total + Notes: footer strip at the bottom of each card */
+  .schedule-table td:nth-child(5) {
+    grid-column: 1;
+    border-top: 2px solid var(--border);
+    background: var(--bg);
+  }
+  .schedule-table td:nth-child(6) {
+    grid-column: 2 / -1;
+    border-top: 2px solid var(--border);
+    border-left: 1px solid var(--border);
+    background: var(--bg);
+    max-width: none;
+  }
+
+  /* Compact text inside session buttons to fit 3 columns */
+  .session-btn .sb-label { font-size: 0.75rem; }
+  .session-btn .sb-status { font-size: 0.65rem; }
+}
+
+@media (max-width: 380px) {
+  #main { padding: 0.75rem 0.5rem; }
+  .session-btn { padding: 0.4rem 0.5rem; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .stat-card .stat-value { font-size: 1.35rem; }
 }

@@ -213,16 +213,15 @@ function renderScheduleTable() {
     ].filter(Boolean).join(' ');
 
     let highlightBadge = '';
-    if (wk.highlight === '5K TIME TRIAL') highlightBadge = '<br><span class="week-highlight-badge amber">5K TIME TRIAL</span>';
-    if (wk.highlight === 'PEAK WEEK') highlightBadge = '<br><span class="week-highlight-badge teal">PEAK WEEK</span>';
-    if (wk.highlight === '5K GOAL ATTEMPT') highlightBadge = '<br><span class="week-highlight-badge green">GOAL ATTEMPT</span>';
+    if (wk.highlight === '5K TIME TRIAL') highlightBadge = '<span class="week-highlight-badge amber">5K TIME TRIAL</span>';
+    if (wk.highlight === 'PEAK WEEK') highlightBadge = '<span class="week-highlight-badge teal">PEAK WEEK</span>';
+    if (wk.highlight === '5K GOAL ATTEMPT') highlightBadge = '<span class="week-highlight-badge green">GOAL ATTEMPT</span>';
 
     return `<tr class="${rowClass}">
       <td>
         <div class="week-num-cell">
-          <div class="wn-num">Week ${wk.num}${wk.num === currentWeek ? ' ◀' : ''}</div>
+          <div class="wn-num">Week ${wk.num}${wk.num === currentWeek ? ' ◀' : ''}${highlightBadge ? ' ' + highlightBadge : ''}</div>
           <div class="wn-dates">${esc(wk.dates)}</div>
-          ${highlightBadge}
         </div>
       </td>
       <td>${sessionButtonHTML(wk.mon, wk.num)}</td>
