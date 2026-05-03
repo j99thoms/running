@@ -2,29 +2,57 @@
    Storage
    ============================================================ */
 const STORAGE_KEY = 'runningTracker';
+const API_BASE = '';
 
-function loadData() {
+function loadLocalData() {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { sessions: {}, uiState: { collapsed: {} } };
   } catch { return { sessions: {}, uiState: { collapsed: {} } }; }
 }
 
-function saveData(data) {
+function saveLocalData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-let appData = loadData();
+async function loadData() {
+  try {
+    const res = await fetch(`${API_BASE}/api/sessions`, { credentials: 'same-origin' });
+    if (res.ok) {
+      const { sessions } = await res.json();
+      Object.assign(appData.sessions, sessions);
+      saveLocalData(appData);
+      renderScheduleTable();
+      renderDashboard();
+    }
+  } catch (_) {}
+}
+
+let appData = loadLocalData();
 
 function getSession(id) { return appData.sessions[id] || null; }
 
-function setSession(id, obj) {
+async function setSession(id, obj) {
   appData.sessions[id] = obj;
-  saveData(appData);
+  saveLocalData(appData);
+  try {
+    await fetch(`${API_BASE}/api/sessions/${id}`, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(obj),
+    });
+  } catch (_) {}
 }
 
-function clearSession(id) {
+async function clearSession(id) {
   delete appData.sessions[id];
-  saveData(appData);
+  saveLocalData(appData);
+  try {
+    await fetch(`${API_BASE}/api/sessions/${id}`, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+    });
+  } catch (_) {}
 }
 
 /* ============================================================
@@ -368,7 +396,7 @@ function initCollapsibles() {
       if (!appData.uiState) appData.uiState = {};
       if (!appData.uiState.collapsed) appData.uiState.collapsed = {};
       appData.uiState.collapsed[key] = collapsed;
-      saveData(appData);
+      saveLocalData(appData);
     });
   });
 }
@@ -460,17 +488,23 @@ function closeModal() {
   modalSessionId = null;
 }
 
-function saveModal() {
+async function saveModal() {
   if (!modalSessionId) return;
 
   const completed = document.getElementById('modal-completed').checked;
   const date = document.getElementById('modal-date').value;
   const notes = document.getElementById('modal-notes').value;
+  const saveBtn = document.getElementById('modal-save');
 
-  if (completed || date || notes.trim()) {
-    setSession(modalSessionId, { completed, date: date || null, notes });
-  } else {
-    clearSession(modalSessionId);
+  saveBtn.disabled = true;
+  try {
+    if (completed || date || notes.trim()) {
+      await setSession(modalSessionId, { completed, date: date || null, notes });
+    } else {
+      await clearSession(modalSessionId);
+    }
+  } finally {
+    saveBtn.disabled = false;
   }
 
   closeModal();
@@ -478,10 +512,10 @@ function saveModal() {
   renderDashboard();
 }
 
-function clearModal() {
+async function clearModal() {
   if (!modalSessionId) return;
   if (!confirm('Clear all data for this session?')) return;
-  clearSession(modalSessionId);
+  await clearSession(modalSessionId);
   closeModal();
   renderScheduleTable();
   renderDashboard();
@@ -538,7 +572,7 @@ function applyDarkMode(dark) {
 /* ============================================================
    Init
    ============================================================ */
-function init() {
+async function init() {
   renderOverview();
   renderRunTypes();
   renderBlocks();
@@ -551,6 +585,7 @@ function init() {
   initHamburger();
   initDarkMode();
   initModal();
+  await loadData();
 }
 
 document.addEventListener('DOMContentLoaded', init);
