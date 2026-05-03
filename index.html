@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Plan · May–July 2026</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- ============================================================
+     Header
+     ============================================================ -->
+<header id="app-header">
+  <div class="header-logo">
+    <span class="logo-icon">🏃</span>
+    <span>Running Plan 2026</span>
+  </div>
+  <nav class="header-nav">
+    <a href="#dashboard">Dashboard</a>
+    <a href="#overview">Overview</a>
+    <a href="#run-types">Run Types</a>
+    <a href="#blocks">Blocks</a>
+    <a href="#schedule">Schedule</a>
+    <a href="#pacing">Pacing</a>
+    <a href="#notes">Notes</a>
+  </nav>
+  <button id="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+  <button id="hamburger" aria-label="Toggle menu">☰</button>
+</header>
+
+<!-- ============================================================
+     App Body
+     ============================================================ -->
+<div id="app-body">
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-link active"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="#overview" class="nav-link"><span class="nav-icon">🗺</span> Overview</a>
+        <a href="#run-types" class="nav-link"><span class="nav-icon">🏃</span> Run Types</a>
+        <a href="#blocks" class="nav-link"><span class="nav-icon">📅</span> Block Structure</a>
+        <a href="#schedule" class="nav-link"><span class="nav-icon">📋</span> Weekly Schedule</a>
+        <a href="#pacing" class="nav-link"><span class="nav-icon">⏱</span> Pacing Guide</a>
+        <a href="#notes" class="nav-link"><span class="nav-icon">📝</span> Key Notes</a>
+      </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Progress</div>
+      <div class="sidebar-progress">
+        <div class="sp-label">Sessions completed</div>
+        <div class="sp-count" id="sidebar-count">0 / 39</div>
+        <div class="sp-bar"><div class="sp-fill" id="sidebar-fill" style="width:0%"></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- ======================================================
+         Dashboard
+         ====================================================== -->
+    <section class="section" id="dashboard">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">📊</span> Dashboard</h2>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="stat-card accent">
+          <div class="stat-label">Completed</div>
+          <div class="stat-value" id="stat-completed">0</div>
+          <div class="stat-sub" id="stat-completed-sub">of 39 sessions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Current Week</div>
+          <div class="stat-value" id="stat-current-week">—</div>
+          <div class="stat-sub" id="stat-current-dates">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Week Done</div>
+          <div class="stat-value" id="stat-week-done">0/3</div>
+          <div class="stat-sub">Mon · Wed · Sun</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Overall Progress</div>
+          <div class="stat-value" id="stat-pct">0%</div>
+          <div class="stat-sub">May–July plan</div>
+        </div>
+      </div>
+
+      <div class="progress-bar-wrap" style="margin-bottom:1.25rem">
+        <div class="pb-label">
+          <span>May 4</span>
+          <span id="pb-pct-label">0%</span>
+          <span>Aug 2</span>
+        </div>
+        <div class="pb-track"><div class="pb-fill" id="main-pb" style="width:0%"></div></div>
+      </div>
+
+      <div id="next-session-wrap"></div>
+
+      <div class="race-goals-row" style="margin-top:1rem" id="race-goals-row"></div>
+    </section>
+
+    <!-- ======================================================
+         Strategic Overview
+         ====================================================== -->
+    <section class="section" id="overview">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">🗺</span> Strategic Overview</h2>
+        <button class="collapse-btn" data-target="overview-body" data-key="overview">
+          <span class="arrow">▾</span> Collapse
+        </button>
+      </div>
+      <div class="collapsible-body" id="overview-body">
+        <div class="overview-grid card" style="gap:1.25rem;padding:1.25rem" id="overview-grid"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         Run Type Designs
+         ====================================================== -->
+    <section class="section" id="run-types">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">🏃</span> Run Type Designs</h2>
+        <button class="collapse-btn" data-target="run-types-body" data-key="runTypes">
+          <span class="arrow">▾</span> Collapse
+        </button>
+      </div>
+      <div class="collapsible-body" id="run-types-body">
+        <div class="run-types-grid" id="run-types-grid"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         Block Structure
+         ====================================================== -->
+    <section class="section" id="blocks">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">📅</span> Block Structure</h2>
+        <button class="collapse-btn" data-target="blocks-body" data-key="blocks">
+          <span class="arrow">▾</span> Collapse
+        </button>
+      </div>
+      <div class="collapsible-body" id="blocks-body">
+        <div class="blocks-grid" id="blocks-grid"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         Weekly Schedule
+         ====================================================== -->
+    <section class="section" id="schedule">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">📋</span> Weekly Schedule</h2>
+        <span style="font-size:0.78rem;color:var(--text-muted)">Click any session to log progress</span>
+      </div>
+      <div class="schedule-table-wrap card" style="padding:0;overflow:hidden">
+        <table class="schedule-table" id="schedule-table">
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Monday (678)</th>
+              <th>Wednesday</th>
+              <th>Sunday</th>
+              <th>Total</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="schedule-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         Pacing Cheat Sheet
+         ====================================================== -->
+    <section class="section" id="pacing">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">⏱</span> Pacing Cheat Sheet</h2>
+        <button class="collapse-btn" data-target="pacing-body" data-key="pacing">
+          <span class="arrow">▾</span> Collapse
+        </button>
+      </div>
+      <div class="collapsible-body" id="pacing-body">
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="pacing-table" id="pacing-table">
+            <thead>
+              <tr>
+                <th>Zone</th>
+                <th>Pace</th>
+                <th>HR Target</th>
+                <th>When to use</th>
+              </tr>
+            </thead>
+            <tbody id="pacing-tbody"></tbody>
+          </table>
+        </div>
+        <p style="font-size:0.77rem;color:var(--text-muted);margin-top:0.6rem;padding-left:0.25rem">
+          ⚠️ Paces derived from 5k PR of 24:00 (4:48/km). Update after Week 4 time trial.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         Key Notes
+         ====================================================== -->
+    <section class="section" id="notes">
+      <div class="section-header">
+        <h2 class="section-title"><span class="s-icon">📝</span> Key Notes</h2>
+        <button class="collapse-btn" data-target="notes-body" data-key="notes">
+          <span class="arrow">▾</span> Collapse
+        </button>
+      </div>
+      <div class="collapsible-body" id="notes-body">
+        <div class="notes-grid" id="notes-grid"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ============================================================
+     Session Modal
+     ============================================================ -->
+<div id="modal-overlay" role="dialog" aria-modal="true">
+  <div id="modal">
+    <div id="modal-header">
+      <div>
+        <div class="mh-week" id="modal-week-label"></div>
+        <div class="mh-title" id="modal-session-title"></div>
+      </div>
+      <button id="modal-close" aria-label="Close">×</button>
+    </div>
+    <div id="modal-body">
+      <div class="modal-session-desc" id="modal-desc"></div>
+
+      <div class="modal-field">
+        <label>Status</label>
+        <label class="completed-toggle">
+          <span class="toggle-switch">
+            <input type="checkbox" id="modal-completed" />
+            <span class="toggle-track"></span>
+          </span>
+          <span class="toggle-label" id="toggle-label-text">Mark as completed</span>
+        </label>
+      </div>
+
+      <div class="modal-field" id="modal-date-field">
+        <label for="modal-date">Date completed</label>
+        <input type="date" id="modal-date" />
+      </div>
+
+      <div class="modal-field">
+        <label for="modal-notes">Notes</label>
+        <textarea id="modal-notes" placeholder="How did it go? Pace, HR, how you felt..."></textarea>
+      </div>
+    </div>
+    <div id="modal-footer">
+      <button class="btn btn-danger" id="modal-clear" title="Clear all data for this session">Clear</button>
+      <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Apply dark mode before render to avoid flash
+  (function() {
+    const stored = localStorage.getItem('darkMode');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = stored !== null ? stored === 'true' : prefersDark;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  })();
+</script>
+<script src="training-plan-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
